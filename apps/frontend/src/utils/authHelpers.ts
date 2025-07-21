@@ -15,7 +15,7 @@ export function login(user: User, token: string) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
 }
 
-export function logout(redirect: string = "/login") {
+export function logout(redirect: string = "/") {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
   window.location.href = redirect;

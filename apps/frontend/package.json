@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@kobalte/core": "^0.13.10",
     "@solidjs/router": "^0.15.3",
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.10.0",
+    "lucide-solid": "^0.525.0",
     "solid-js": "^1.9.7",
     "zustand": "^5.0.6"
   },

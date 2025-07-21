@@ -1,13 +1,11 @@
+import Sidebar from "../components/Sidebar"
 import { logout } from "../utils/authHelpers"
 
 
 const HomePage = () => {
 
   return (
-    <div>
-      hello this is home
-      <button onclick={() => logout()}>Logout</button>
-    </div>
+    <Sidebar />
   )
 }
 

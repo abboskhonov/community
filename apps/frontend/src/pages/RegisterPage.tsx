@@ -1,11 +1,18 @@
-import RegisterForm from "../components/Auth/RegisterForm"
+import { useNavigate } from "@solidjs/router";
+import RegisterForm from "../components/Auth/RegisterForm";
+import { isAuthenticated } from "../utils/authHelpers";
 
 const RegisterPage = () => {
-  return (
-   <>
-   <RegisterForm />
-   </>
-  )
-}
+  const navigate = useNavigate();
+  if (isAuthenticated()) {
+    navigate('/')
+  }
 
-export default RegisterPage
+  return (
+    <>
+      <RegisterForm />
+    </>
+  );
+};
+
+export default RegisterPage;
