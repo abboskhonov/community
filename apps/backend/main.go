@@ -1,15 +1,31 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"community/database"
+	"community/handlers"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
-	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "pong")
-	})
+	database.Connect()
 
-	fmt.Println("Listening on :8080")
-	http.ListenAndServe(":8080", nil)
+	app := fiber.New()
+
+	// Must come BEFORE routes
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:5173",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
+		AllowCredentials: true,
+	}))
+
+	api := app.Group("/api")
+	api.Get("/users", handlers.GetUsers)
+	api.Post("/users", handlers.CreateUser)
+	api.Put("/users/:id", handlers.UpdateUser)
+	api.Delete("/users/:id", handlers.DeleteUser)
+
+	app.Listen(":3000")
 }
