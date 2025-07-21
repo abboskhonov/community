@@ -1,7 +1,7 @@
 // src/App.tsx
-import Navbar from "./../components/Navbar";
-import Hero from "./../components/Hero";
-import Footer from "./../components/Footer";
+import Navbar from "../components/LandingPage/Navbar";
+import Hero from "../components/LandingPage/Hero";
+import Footer from "../components/LandingPage/Footer";
 import HomePage from "./HomePage";
 import { isAuthenticated } from "../utils/authHelpers";
 

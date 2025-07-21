@@ -9,15 +9,23 @@ import {
   Plus,
   Search,
 } from "lucide-solid";
-import CreateCommunityForm from "./CreateCommunityForm";
+import CreateCommunityForm from "././Community/CreateCommunityForm";
 
 const communities = ["SolidJS", "GoFiber", "NextGen", "OpenDev"];
+
+type NavItem = {
+  label: string;
+  href: string;
+};
+
+
 
 const Sidebar = () => {
   const [selectedCommunity, setSelectedCommunity] = createSignal(communities[0]);
   const [showDropdown, setShowDropdown] = createSignal(false);
   const [showCreateForm, setShowCreateForm] = createSignal(false);
   const [activeNav, setActiveNav] = createSignal("Home");
+  
 
   const handleNavClick = (navItem) => {
     setActiveNav(navItem);
@@ -146,7 +154,7 @@ const Sidebar = () => {
         <div class="fixed inset-0 z-50 flex items-center justify-center">
           {/* Background overlay */}
           <div 
-            class="absolute inset-0 bg-black bg-opacity-50" 
+            class="absolute inset-0 bg-black sm-blur bg-opacity-[0.05]" 
             onClick={() => setShowCreateForm(false)}
           />
           {/* Form container */}

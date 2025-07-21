@@ -3,7 +3,7 @@ package main
 import (
 	"community/database"
 	"community/handlers"
-	// "community/middleware"
+	"community/middleware"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -28,7 +28,8 @@ func main() {
 	api.Post("/login", handlers.Login)
 
 	// Protected routes
-	// protected := api.Group("/", middleware.Protect)
+	protected := api.Group("", middleware.Protect)
+	protected.Post("/communities", handlers.CreateCommunity)
 
 
 	app.Listen(":3000")

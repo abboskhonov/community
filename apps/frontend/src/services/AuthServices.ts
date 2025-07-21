@@ -35,13 +35,12 @@ export async function loginUser(payload: LoginPayload): Promise<AuthResponse> {
 export async function registerUser(payload: RegisterPayload): Promise<AuthResponse> {
   try {
     const res = await instance.post("/register", payload);
-    const data = res.data;
-    localStorage.setItem("token", data.token);
-    return data;
+    return res.data;
   } catch (err: any) {
     throw new Error(err.response?.data?.message || "Registration failed");
   }
 }
+
 
 export function logoutUser(): void {
   localStorage.removeItem("token");
