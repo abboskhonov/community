@@ -1,18 +1,15 @@
-import { createSignal } from 'solid-js'
-import Register from './components/Auth/RegisterForm'
-import axios from 'axios'
+// src/App.tsx
+import { Router, Route } from '@solidjs/router'
+import LandingPage from './pages/LandingPage'
+import RegisterPage from './pages/RegisterPage'
+import LoginPage from './pages/LoginPage'
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL
-
-function App() {
-
-  const [count, setCount] = createSignal(0)
-
+export default function App() {
   return (
-    <>
-      <Register />
-    </>
+    <Router>
+      <Route path="/" component={LandingPage} />
+      <Route path="/login" component={LoginPage} />
+      <Route path="/register" component={RegisterPage} />
+    </Router>
   )
 }
-
-export default App

@@ -3,6 +3,7 @@ package main
 import (
 	"community/database"
 	"community/handlers"
+	// "community/middleware"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -13,7 +14,6 @@ func main() {
 
 	app := fiber.New()
 
-	// Must come BEFORE routes
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "http://localhost:5173",
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
@@ -22,10 +22,14 @@ func main() {
 	}))
 
 	api := app.Group("/api")
-	api.Get("/users", handlers.GetUsers)
-	api.Post("/users", handlers.CreateUser)
-	api.Put("/users/:id", handlers.UpdateUser)
-	api.Delete("/users/:id", handlers.DeleteUser)
+
+	// Public routes
+	api.Post("/register", handlers.Register)
+	api.Post("/login", handlers.Login)
+
+	// Protected routes
+	// protected := api.Group("/", middleware.Protect)
+
 
 	app.Listen(":3000")
 }

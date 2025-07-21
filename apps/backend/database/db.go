@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"community/models" // Update this import path if your module name is different
+	"community/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -21,7 +21,12 @@ func Connect() {
 		log.Fatal("❌ Failed to connect to database:", err)
 	}
 
-	// AutoMigrate your models
+	// Drop and recreate the table to fix NOT NULL error
+	// err = DB.Migrator().DropTable(&models.User{})
+	if err != nil {
+		log.Fatal("❌ Failed to drop table:", err)
+	}
+
 	err = DB.AutoMigrate(&models.User{})
 	if err != nil {
 		log.Fatal("❌ Migration failed:", err)
