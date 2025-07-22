@@ -1,43 +1,51 @@
-import { createSignal } from 'solid-js';
-import { registerUser } from './../../services/AuthServices';
-  import { login } from "../../utils/authHelpers";
-  import { useNavigate } from "@solidjs/router";
+import { createSignal } from "solid-js";
+import { registerUser, loginUser } from "../../services/AuthServices";
+import { login } from "../../utils/authHelpers";
+import { useNavigate } from "@solidjs/router";
 
 export default function Register() {
-  const [username, setUsername] = createSignal('');
-  const [password, setPassword] = createSignal('');
-  const [confirmPassword, setConfirmPassword] = createSignal('');
-  const [error, setError] = createSignal('');
-
+  const [username, setUsername] = createSignal("");
+  const [password, setPassword] = createSignal("");
+  const [confirmPassword, setConfirmPassword] = createSignal("");
+  const [error, setError] = createSignal("");
   const [loading, setLoading] = createSignal(false);
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const handleSubmit = async (e: Event) => {
-  e.preventDefault();
-  setError('');
+  const handleSubmit = async (e: Event) => {
+    e.preventDefault();
+    setError("");
 
-  if (password() !== confirmPassword()) {
-    setError('Passwords do not match');
-    return;
-  }
+    if (password() !== confirmPassword()) {
+      setError("Passwords do not match");
+      return;
+    }
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const data = await registerUser({
-      username: username(),
-      password: password(),
-    });
+    try {
+      // Step 1: Register user
+      await registerUser({
+        username: username(),
+        password: password(),
+      });
 
-    login(data.user, data.token);         // ✅ store token & user
-    navigate("/", { replace: true });     // ✅ redirect to homepage
-  } catch (err: any) {
-    setError(err.message || 'Register failed');
-  } finally {
-    setLoading(false);
-  }
-};
+      // Step 2: Login user immediately
+      const res = await loginUser({
+        username: username(),
+        password: password(),
+      });
 
+      // Step 3: Store token and user
+      login(res.user, res.token);
+
+      // Step 4: Redirect
+      navigate("/", { replace: true });
+    } catch (err: any) {
+      setError(err.message || "Register failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} class="space-y-4 max-w-md mx-auto mt-8">
@@ -73,7 +81,7 @@ const handleSubmit = async (e: Event) => {
         disabled={loading()}
         class="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
       >
-        {loading() ? 'Registering...' : 'Register'}
+        {loading() ? "Registering..." : "Register"}
       </button>
     </form>
   );

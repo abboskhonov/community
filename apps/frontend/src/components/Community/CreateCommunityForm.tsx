@@ -8,28 +8,44 @@ export default function CreateCommunityForm() {
   const [description, setDescription] = createSignal("");
   const [loading, setLoading] = createSignal(false);
 
-  const ownerId = 1; // Replace with actual user ID
+  
+const handleSubmit = async (e: Event) => {
+  e.preventDefault();
+  setLoading(true);
 
-  const handleSubmit = async (e: Event) => {
-    e.preventDefault();
-    setLoading(true);
+  const token = localStorage.getItem("token"); // or your auth storage method
+  if (!token) {
+    console.error("No token found");
+    setLoading(false);
+    return;
+  }
 
-    try {
-      const res = await instance.post("/communities", {
+  try {
+    const res = await instance.post(
+      "/communities",
+      {
         name: name(),
+        username: username(),
         description: description(),
-        owner_id: ownerId,
-      });
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      console.log("Community created:", res.data);
-      setName("");
-      setDescription("");
-    } catch (err) {
-      console.error("Failed to create community:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    console.log("Community created:", res.data);
+    setName("");
+    setUsername("");
+    setDescription("");
+  } catch (err) {
+    console.error("Failed to create community:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <form

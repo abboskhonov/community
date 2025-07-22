@@ -85,3 +85,36 @@ func DeleteCommunity(c *fiber.Ctx) error {
 	database.DB.Delete(&community)
 	return c.JSON(fiber.Map{"message": "Community deleted"})
 }
+
+
+func GetUserAndOtherCommunities(c *fiber.Ctx) error {
+	val := c.Locals("userID")
+	userID, ok := val.(uint)
+	if !ok {
+		return c.Status(401).JSON(fiber.Map{"error": "Unauthorized"})
+	}
+
+	var userCommunities []models.Community
+	var otherCommunities []models.Community
+
+	// Get communities created by the user
+	if err := database.DB.
+		Where("owner_id = ?", userID).
+		Preload("Owner").
+		Find(&userCommunities).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to get user's communities"})
+	}
+
+	// Get communities NOT created by the user
+	if err := database.DB.
+		Where("owner_id != ?", userID).
+		Preload("Owner").
+		Find(&otherCommunities).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to get other communities"})
+	}
+
+	return c.JSON(fiber.Map{
+		"userCommunities":  userCommunities,
+		"otherCommunities": otherCommunities,
+	})
+}

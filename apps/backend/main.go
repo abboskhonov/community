@@ -30,6 +30,8 @@ func main() {
 	// Protected routes
 	protected := api.Group("", middleware.Protect)
 	protected.Post("/communities", handlers.CreateCommunity)
+	protected.Get("/communities/tab", handlers.GetUserAndOtherCommunities)
+
 
 
 	app.Listen(":3000")
